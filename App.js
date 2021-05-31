@@ -18,8 +18,8 @@ import {
 } from 'react-native';
 import MealsNavigator from './navigation/MealsNavigator';
 
-export default function App(){
-  return(
+export default function App() {
+  return (
     <MealsNavigator />
   );
 }
