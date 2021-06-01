@@ -1,13 +1,11 @@
 import React from 'react';
 import { View, StyleSheet, Text, Alert, Button, ScrollView, Image } from 'react-native';
-import { MEALS } from '../data/dummy-data';
+import {useSelector} from 'react-redux';
 import 'react-native-gesture-handler';
 import Color from '../constants/Colors';
-import { useEffect } from 'react';
-import IconMater from 'react-native-vector-icons/MaterialIcons';
+import { useEffect,useLayoutEffect } from 'react';
 import { Item, HeaderButtons } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
-import { useFocusEffect } from '@react-navigation/native';
 
 const ListItem = (props) => {
     return (
@@ -19,10 +17,12 @@ const ListItem = (props) => {
 
 
 const MealDetailsScreen = ({ props, navigation, route }) => {
-    const { mealId } = route.params;
-    const mealSelected = MEALS.find(meal => meal.id === mealId);
+    const availableMeals = useSelector(state => state.meals.meals);
 
-    useFocusEffect(() => {
+    const { mealId } = route.params;
+    const mealSelected = availableMeals.find(meal => meal.id === mealId);
+
+    useLayoutEffect(() => {
         navigation.setOptions({
             title: mealSelected.title,
             headerTitleAlign: 'center',

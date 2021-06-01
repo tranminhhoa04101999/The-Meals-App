@@ -17,9 +17,21 @@ import {
   View,
 } from 'react-native';
 import MealsNavigator from './navigation/MealsNavigator';
+import mealReducer from './store/reducers/meal';
+import { createStore, combineReducers } from 'redux'
+import { Provider } from 'react-redux'
 
 export default function App() {
+
+  const rootReducer = combineReducers({
+    meals: mealReducer
+  });
+  const store = createStore(rootReducer);
+
   return (
-    <MealsNavigator />
+    <Provider store={store}>
+      <MealsNavigator />
+
+    </Provider>
   );
 }
