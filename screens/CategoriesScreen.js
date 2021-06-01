@@ -3,6 +3,9 @@ import { View, StyleSheet, Text, Button, FlatList, TouchableOpacity } from 'reac
 import 'react-native-gesture-handler';
 import { CATEGORIES } from '../data/dummy-data';
 import CategoryGrid from '../components/CategoryGrid';
+import {useFocusEffect} from '@react-navigation/native';
+import {HeaderButtons,Item} from 'react-navigation-header-buttons';
+import HeaderButton from '../components/HeaderButton';
 
 const CategoriesScreen = props => {
     const renderGridItem = (data) => {
@@ -13,6 +16,13 @@ const CategoriesScreen = props => {
                 })} />
         );
     };
+    useFocusEffect(()=>{
+        props.navigation.setOptions({
+            headerLeft:() =><HeaderButtons HeaderButtonComponent={HeaderButton} > 
+                <Item iconName="menu" title="Menu" onPress={()=>{props.navigation.toggleDrawer()}}></Item>
+            </HeaderButtons>
+        });
+    });
 
     return (
         <FlatList keyExtractor={
