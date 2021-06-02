@@ -1,11 +1,12 @@
 import React from 'react';
 import { View, StyleSheet, Text, Alert, Button, ScrollView, Image } from 'react-native';
-import {useSelector} from 'react-redux';
 import 'react-native-gesture-handler';
 import Color from '../constants/Colors';
-import { useEffect,useLayoutEffect } from 'react';
+import { useEffect,useLayoutEffect,useCallback } from 'react';
 import { Item, HeaderButtons } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
+import {useSelector,useDispatch} from 'react-redux'
+import {toggleFavorite} from '../store/actions/meals';
 
 const ListItem = (props) => {
     return (
@@ -17,10 +18,18 @@ const ListItem = (props) => {
 
 
 const MealDetailsScreen = ({ props, navigation, route }) => {
-    const availableMeals = useSelector(state => state.meals.meals);
-
     const { mealId } = route.params;
+
+    const availableMeals = useSelector(state => state.meals.meals);
+    const isFav = useSelector(state => state.meals.FavoriteMeal.some(meal => meal.id === mealId));
     const mealSelected = availableMeals.find(meal => meal.id === mealId);
+
+    const dispatch  = useDispatch();
+    const toggleFavoriteHandler = useCallback(()=> {
+        dispatch(toggleFavorite(mealId));
+    },[mealId,dispatch]);
+
+    const mealTitle = route.params.mealTitle;
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -34,7 +43,7 @@ const MealDetailsScreen = ({ props, navigation, route }) => {
             headerRight: () => {
                 return (
                     <HeaderButtons HeaderButtonComponent={HeaderButton}>
-                        <Item title='favorite' iconName='favorite' />
+                        <Item title='favorite' iconName={isFav ? 'favorite':'favorite-outline'} onPress={toggleFavoriteHandler}/>
                     </HeaderButtons>
                 );
             }

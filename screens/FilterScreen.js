@@ -5,7 +5,8 @@ import HeaderButton from '../components/HeaderButton';
 import { useFocusEffect } from '@react-navigation/native';
 import { useState, useEffect, useCallback } from 'react';
 import Color from '../constants/Colors';
-
+import {useDispatch} from 'react-redux';
+import {filterMeal} from '../store/actions/meals';
 
 const ViewSwitch = (props) => {
     return (
@@ -25,6 +26,8 @@ const FilterScreen = ({ props, navigation, route }) => {
     const [isLactoseFree, setLactoseFree] = useState(false);
     const [isVegan, setVegan] = useState(false);
 
+    const dispatch = useDispatch();
+
     const saveThuocTinh = useCallback(() => {
         const mangThuoctinh = {
             GlutenFree: isGluten,
@@ -32,12 +35,8 @@ const FilterScreen = ({ props, navigation, route }) => {
             LactoseFree: isLactoseFree,
             VeganFree: isVegan,
         };
-        console.log(mangThuoctinh);
-    }, [isGluten, isVegan, isLactoseFree, isVegetarian]);
-
-    useEffect(() => {
-        navigation.setParams({save: saveThuocTinh});
-    },[saveThuocTinh]);
+        dispatch(filterMeal(mangThuoctinh));
+    }, [isGluten, isVegan, isLactoseFree, isVegetarian,dispatch]);
 
     useFocusEffect(() => {
         navigation.setOptions({
@@ -47,7 +46,7 @@ const FilterScreen = ({ props, navigation, route }) => {
                 </HeaderButtons>),
             headerRight: (() =>
                 <HeaderButtons HeaderButtonComponent={HeaderButton}>
-                    <Item iconName="save" title="Save" onPress={()=>{}}></Item>
+                    <Item iconName="save" title="Save" onPress={saveThuocTinh}></Item>
                 </HeaderButtons>)
         });
     });
